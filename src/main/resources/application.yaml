@@ -1,3 +1,6 @@
 spring:
   application:
     name: zookeeper-grpc
+
+zookeeper:
+  connect-string: localhost:2181

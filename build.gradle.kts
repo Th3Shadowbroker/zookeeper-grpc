@@ -21,10 +21,22 @@ repositories {
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-grpc-server")
+    implementation("org.apache.curator:apache-curator:5.9.0")
     testImplementation("org.springframework.boot:spring-boot-starter-grpc-server-test")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
 tasks.withType<Test> {
     useJUnitPlatform()
+}
+
+protobuf {
+    protoc {
+        artifact = "com.google.protobuf:protoc:3.25.5"
+    }
+    plugins {
+        create("grpc") {
+            artifact = "io.grpc:protoc-gen-grpc-java:1.68.1"
+        }
+    }
 }
