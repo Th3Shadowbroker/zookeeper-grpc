@@ -1,0 +1,9 @@
+.git
+.gradle
+build
+out
+.idea
+*.iml
+HELP.md
+README.md
+.pre-commit-config.yaml
