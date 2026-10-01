@@ -3,4 +3,7 @@ spring:
     name: zookeeper-grpc
 
 zookeeper:
-  connect-string: localhost:2181
+  uri: localhost:2181
+  backoff:
+    baseSleepMs: 1000
+    maxRetries: 3

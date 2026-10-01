@@ -21,9 +21,13 @@ repositories {
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-grpc-server")
-    implementation("org.apache.curator:apache-curator:5.9.0")
+    implementation("org.apache.curator:curator-framework:5.9.0")
     testImplementation("org.springframework.boot:spring-boot-starter-grpc-server-test")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    compileOnly("org.projectlombok:lombok")
+    annotationProcessor("org.projectlombok:lombok")
+    testCompileOnly("org.projectlombok:lombok")
+    testAnnotationProcessor("org.projectlombok:lombok")
 }
 
 tasks.withType<Test> {
