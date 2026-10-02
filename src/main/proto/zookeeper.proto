@@ -3,6 +3,8 @@ syntax = "proto3";
 option java_package = "de.telekom.eni.zookeepergrpc.proto";
 option java_multiple_files = true;
 
+option go_package = "/proto";
+
 service ZookeeperService {
   rpc Write(WriteRequest) returns (WriteResponse);
 }
