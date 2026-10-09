@@ -3,32 +3,26 @@ package de.telekom.eni.zookeepergrpc.service;
 import de.telekom.eni.zookeepergrpc.proto.WriteRequest;
 import de.telekom.eni.zookeepergrpc.proto.WriteResponse;
 import io.grpc.stub.StreamObserver;
-import org.apache.curator.framework.CuratorFramework;
-import org.apache.curator.framework.api.CreateBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
-class ZkServiceTest {
+class ZkGrpcServiceTest {
 
-    private CuratorFramework curator;
-    private ZkGrpcService zkService;
+    private ZkService zkService;
+    private ZkGrpcService zkGrpcService;
 
     @BeforeEach
     void setUp() {
-        curator = mock(CuratorFramework.class);
-        zkService = new ZkGrpcService(curator);
+        zkService = mock(ZkService.class);
+        zkGrpcService = new ZkGrpcService(zkService);
     }
 
     @Test
     void testWriteSuccess() throws Exception {
-        CreateBuilder createBuilder = mock(CreateBuilder.class, RETURNS_DEEP_STUBS);
-        when(curator.create()).thenReturn(createBuilder);
-
         var payload = "same payload";
         WriteRequest request = WriteRequest.newBuilder()
                 .setZnode("/test/node")
@@ -37,9 +31,9 @@ class ZkServiceTest {
 
         StreamObserver<WriteResponse> responseObserver = mock(StreamObserver.class);
 
-        zkService.write(request, responseObserver);
+        zkGrpcService.write(request, responseObserver);
 
-        verify(createBuilder.orSetData()).forPath("/test/node", payload.getBytes());
+        verify(zkService).write("/test/node", payload);
 
         ArgumentCaptor<WriteResponse> responseCaptor = ArgumentCaptor.forClass(WriteResponse.class);
         verify(responseObserver).onNext(responseCaptor.capture());
@@ -51,10 +45,8 @@ class ZkServiceTest {
 
     @Test
     void testWriteError() throws Exception {
-        CreateBuilder createBuilder = mock(CreateBuilder.class, RETURNS_DEEP_STUBS);
-        when(curator.create()).thenReturn(createBuilder);
-        when(createBuilder.orSetData().forPath(anyString(), any(byte[].class)))
-                .thenThrow(new RuntimeException("ZK connection error"));
+        doThrow(new RuntimeException("ZK connection error"))
+                .when(zkService).write(anyString(), anyString());
 
         WriteRequest request = WriteRequest.newBuilder()
                 .setZnode("/test/error-node")
@@ -63,7 +55,7 @@ class ZkServiceTest {
 
         StreamObserver<WriteResponse> responseObserver = mock(StreamObserver.class);
 
-        zkService.write(request, responseObserver);
+        zkGrpcService.write(request, responseObserver);
 
         ArgumentCaptor<WriteResponse> responseCaptor = ArgumentCaptor.forClass(WriteResponse.class);
         verify(responseObserver).onNext(responseCaptor.capture());
