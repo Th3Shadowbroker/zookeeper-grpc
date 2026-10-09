@@ -21,8 +21,10 @@ repositories {
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-grpc-server")
+    implementation("org.springframework.boot:spring-boot-starter-webmvc")
     implementation("org.apache.curator:curator-framework:5.9.0")
     testImplementation("org.springframework.boot:spring-boot-starter-grpc-server-test")
+    testImplementation("org.springframework.boot:spring-boot-starter-webmvc-test")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     compileOnly("org.projectlombok:lombok")
     annotationProcessor("org.projectlombok:lombok")

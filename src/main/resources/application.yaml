@@ -1,6 +1,18 @@
 spring:
   application:
     name: zookeeper-grpc
+  main:
+    web-application-type: none
+  profiles:
+    active:
+      - grpc
+      - http
+
+http:
+  enabled: false
+
+grpc:
+  enabled: false
 
 zookeeper:
   uri: localhost:2181

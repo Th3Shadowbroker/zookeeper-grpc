@@ -1,17 +1,13 @@
 package de.telekom.eni.zookeepergrpc.service;
 
-import com.google.protobuf.ByteString;
 import de.telekom.eni.zookeepergrpc.proto.WriteRequest;
 import de.telekom.eni.zookeepergrpc.proto.WriteResponse;
 import io.grpc.stub.StreamObserver;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.api.CreateBuilder;
-import org.apache.curator.framework.api.ProtectACLCreateModePathAndBytesable;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
-
-import java.nio.charset.StandardCharsets;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -20,12 +16,12 @@ import static org.mockito.Mockito.*;
 class ZkServiceTest {
 
     private CuratorFramework curator;
-    private ZkService zkService;
+    private ZkGrpcService zkService;
 
     @BeforeEach
     void setUp() {
         curator = mock(CuratorFramework.class);
-        zkService = new ZkService(curator);
+        zkService = new ZkGrpcService(curator);
     }
 
     @Test
